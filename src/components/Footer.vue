@@ -30,7 +30,7 @@ import { isDark, toggleDark } from '~/composables'
       class="icon-btn"
       i-carbon-logo-github
       rel="noreferrer"
-      href="https://songdaochuanshu.github.io/wordGame/"
+      href="https://github.com/songdaochuanshu/wordGame"
       target="_blank"
       title="GitHub"
     />
