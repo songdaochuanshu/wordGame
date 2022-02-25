@@ -4,8 +4,8 @@
  * @Author: MiKin
  * @Date: 2022-02-25 14:45:31
  * @LastEditors: MiKin
- * @LastEditTime: 2022-02-25 16:00:43
- * @FilePath: \snakeGame\src\components\Footer.vue
+ * @LastEditTime: 2022-02-25 17:18:25
+ * @FilePath: \wordGame\src\components\Footer.vue
 -->
 <script setup lang="ts">
 import { isDark, toggleDark } from '~/composables'
@@ -22,7 +22,7 @@ import { isDark, toggleDark } from '~/composables'
       class="icon-btn"
       i-carbon-logo-github
       rel="noreferrer"
-      href="https://github.com/songdaochuanshu/snakeGame"
+      href="https://songdaochuanshu.github.io/wordGame/"
       target="_blank"
       title="GitHub"
     />
