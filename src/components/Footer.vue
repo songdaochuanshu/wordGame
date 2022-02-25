@@ -7,6 +7,14 @@
  * @LastEditTime: 2022-02-25 17:18:25
  * @FilePath: \wordGame\src\components\Footer.vue
 -->
+
+<style>
+nav{
+    display: flex;
+    float: right;
+}
+</style>
+
 <script setup lang="ts">
 import { isDark, toggleDark } from '~/composables'
 </script>
@@ -28,11 +36,3 @@ import { isDark, toggleDark } from '~/composables'
     />
   </nav>
 </template>
-
-<style>
-
-nav{
-    display: flex;
-    float: right;
-}
-</style>

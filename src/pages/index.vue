@@ -3,8 +3,9 @@ import { useSound } from '@vueuse/sound'
 import buttonSfx from '../assets/button.wav'
 
 const { play } = useSound(buttonSfx)
-const isPlay = ref(true)
+const isPlay = ref(false)
 const setPlay = () => {
+  play()
   isPlay.value = !isPlay.value
 }
 
@@ -16,10 +17,9 @@ const global: g = {
   appearTime: 1000,
   moveTime: 10,
   flagRun: false,
-  letters: "abcdrfghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  letterArr: []//letter,point.x,point.y
-};
-
+  letters: 'abcdrfghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  letterArr: [], // letter,point.x,point.y
+}
 
 interface g {
   cvs: HTMLCanvasElement | any
@@ -36,8 +36,8 @@ interface g {
 const btnText = ref('开始')
 
 onMounted(() => {
-  //当输入键盘内容时
-  document.onkeypress = function (e) {
+  // 当输入键盘内容时
+  document.onkeypress = function(e) {
     removeLetter(e)
   }
 })
@@ -48,11 +48,12 @@ const removeLetter = (e: KeyboardEvent) => {
       global.letterArr.splice(i, 1)
       global.score++
       isPlay.value ? play() : ''
-      let score = document.getElementById('score') as HTMLElement
-      score.innerHTML = global.score + ''
-      if (global.score % 10 == 0 && global.appearTime > 10) {
+      const score = document.getElementById('score') as HTMLElement
+      score.innerHTML = `${global.score}`
+      if (global.score % 10 == 0 && global.appearTime > 10)
         global.appearTime -= 40
-      } else if (global.score % 20 == 0 && global.moveTime > 0) {
+
+      else if (global.score % 20 == 0 && global.moveTime > 0) {
         global.moveTime--
       }
       break
@@ -60,31 +61,30 @@ const removeLetter = (e: KeyboardEvent) => {
   }
 }
 
-
 const start = () => {
   if (!global.flagRun) {
     global.flagRun = true
     startGame()
     btnText.value = '暂停'
-  } else {
-    alert("游戏正在进行！")
+  }
+  else {
+    alert('游戏正在进行！')
   }
 }
 
-
 const init = () => {
-  global.cvs = document.getElementById("wordCanvas")
+  global.cvs = document.getElementById('wordCanvas')
   global.ctx = global.cvs.getContext('2d')
   global.cvs.width = window.innerWidth - 50
   global.cvs.height = window.innerHeight - 30
-  global.ctx.font = "Bold 25px verdana"
-  global.ctx.shadowColor = "#00b0f0"
+  global.ctx.font = 'Bold 25px verdana'
+  global.ctx.shadowColor = '#00b0f0'
   global.ctx.shadowBlur = 15
-  global.ctx.fillStyle = "#fff"
-  let score = document.getElementById('score') as HTMLElement
-  let lives = document.getElementById('lives') as HTMLElement
-  score.innerHTML = global.score + ''
-  lives.innerHTML = global.lives + ''
+  global.ctx.fillStyle = '#fff'
+  const score = document.getElementById('score') as HTMLElement
+  const lives = document.getElementById('lives') as HTMLElement
+  score.innerHTML = `${global.score}`
+  lives.innerHTML = `${global.lives}`
   drawText()
 }
 
@@ -94,14 +94,14 @@ const startGame = () => {
   moveDown(1)
 }
 
-//获取单词
+// 获取单词
 const getLetter = () => {
-  let le = {
+  const le = {
     letter: global.letters[Math.round(Math.random() * 104) % 52],
     point: {
       x: Math.round(Math.random() * 40) % 30 * ((window.innerWidth - 50) / 30),
-      y: 0
-    }
+      y: 0,
+    },
   }
   global.letterArr.push(le)
   if (global.flagRun) {
@@ -111,57 +111,56 @@ const getLetter = () => {
   }
 }
 
-//单词向下移动
+// 单词向下移动
 const moveDown = (speed: number) => {
   for (let i = 0, len = global.letterArr.length; i < len; i++) {
-    global.letterArr[i].point.y += speed;
+    global.letterArr[i].point.y += speed
     if (global.letterArr[i].point.y >= window.innerHeight - 30) {
       global.lives--
-      let lives = document.getElementById('lives') as HTMLElement
-      lives.innerHTML = global.lives + ''
+      const lives = document.getElementById('lives') as HTMLElement
+      lives.innerHTML = `${global.lives}`
       delete global.letterArr[i]
       if (global.lives <= 0) {
-        alert("Game Over!")
+        alert('Game Over!')
         global.flagRun = false
         btnText.value = '开始'
       }
     }
   }
   global.letterArr = compressArr(global.letterArr)
-  drawText();
+  drawText()
   if (global.flagRun) {
-    setTimeout(function () {
+    setTimeout(() => {
       moveDown(1)
     }, global.moveTime)
   }
 }
 
-//画出单词
+// 画出单词
 const drawText = () => {
   global.ctx.clearRect(0, 0, global.cvs.width, global.cvs.height)
-  for (let i = 0, len = global.letterArr.length; i < len; i++) {
+  for (let i = 0, len = global.letterArr.length; i < len; i++)
     global.ctx.fillText(global.letterArr[i].letter, global.letterArr[i].point.x, global.letterArr[i].point.y)
-  }
 }
 
-//压缩数组
+// 压缩数组
 const compressArr = (arr: any[]) => arr.filter((x: null | undefined) => x != undefined && x != null)
-
 
 // 点击单词让单词消失
 const clickLetter = (e: MouseEvent) => {
-  let range = 50;
+  const range = 50
   for (let i = 0, len = global.letterArr.length; i < len; i++) {
     // 允许点击的范围增大 50px
     if (e.offsetX >= global.letterArr[i].point.x - range && e.offsetX <= global.letterArr[i].point.x + range && e.offsetY >= global.letterArr[i].point.y - range && e.offsetY <= global.letterArr[i].point.y + range) {
       global.letterArr.splice(i, 1)
       global.score++
       isPlay.value ? play() : ''
-      let score = document.getElementById('score') as HTMLElement
-      score.innerHTML = global.score + ''
-      if (global.score % 10 == 0 && global.appearTime > 10) {
+      const score = document.getElementById('score') as HTMLElement
+      score.innerHTML = `${global.score}`
+      if (global.score % 10 == 0 && global.appearTime > 10)
         global.appearTime -= 40
-      } else if (global.score % 20 == 0 && global.moveTime > 0) {
+
+      else if (global.score % 20 == 0 && global.moveTime > 0) {
         global.moveTime--
       }
       break
@@ -177,19 +176,21 @@ onMounted(() => {
 <template>
   <div id="content">
     <div class="game">
-      <button btn @click="start">{{ btnText }}</button>
-      <button btn ml-3 @click="setPlay">{{ isPlay ? '关闭音效' : '开启音效' }}</button>
+      <button btn @click="start">
+        {{ btnText }}
+      </button>
+      <button btn ml-3 @click="setPlay">
+        {{ isPlay ? '关闭音效' : '开启音效' }}
+      </button>
       <span ml-3>分数：</span>
-      <span id="score"></span>
+      <span id="score" />
       <span ml-3>生命：</span>
-      <span id="lives"></span>
+      <span id="lives" />
     </div>
 
-    <canvas id="wordCanvas"></canvas>
+    <canvas id="wordCanvas" />
   </div>
 </template>
-
-
 
 <style>
 #content {
