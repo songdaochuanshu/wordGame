@@ -168,9 +168,6 @@ const clickLetter = (e: MouseEvent) => {
   }
 }
 
-onMounted(() => {
-  window.addEventListener('click', clickLetter)
-})
 </script>
 
 <template>
@@ -188,7 +185,7 @@ onMounted(() => {
       <span id="lives" />
     </div>
 
-    <canvas id="wordCanvas" />
+    <canvas id="wordCanvas" @click="clickLetter"  />
   </div>
 </template>
 
