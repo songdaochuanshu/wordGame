@@ -4,12 +4,13 @@
  * @Author: MiKin
  * @Date: 2022-02-25 14:45:31
  * @LastEditors: MiKin
- * @LastEditTime: 2022-02-25 15:42:22
- * @FilePath: \snakeGame\README.md
+ * @LastEditTime: 2022-02-25 17:17:01
+ * @FilePath: \wordGame\README.md
 -->
-### 🐍 snakeGame 
+### 🐻‍❄️ word game  
 
->  zh: 利用js实现的贪吃蛇游戏
->  en: js implementation of the game of snake
+>  zh: 使用键盘消除屏幕上的单词
+> 
+>  en: use keyboard to remove words from the screen
 
-githubPage: [https://songdaochuanshu.github.io/snakeGame/](https://songdaochuanshu.github.io/snakeGame/)
+githubPage: [https://songdaochuanshu.github.io/wordGame/](https://songdaochuanshu.github.io/wordGame/)
