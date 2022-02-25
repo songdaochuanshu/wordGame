@@ -38,23 +38,27 @@ const btnText = ref('开始')
 onMounted(() => {
   //当输入键盘内容时
   document.onkeypress = function (e) {
-    for (var i = 0, len = global.letterArr.length; i < len; i++) {
-      if (String.fromCharCode(e.charCode) == global.letterArr[i].letter) {
-        global.letterArr.splice(i, 1)
-        global.score++
-        isPlay.value ? play() : ''
-        let score = document.getElementById('score') as HTMLElement
-        score.innerHTML = global.score + ''
-        if (global.score % 10 == 0 && global.appearTime > 10) {
-          global.appearTime -= 40
-        } else if (global.score % 20 == 0 && global.moveTime > 0) {
-          global.moveTime--
-        }
-        break
-      }
-    }
+    removeLetter(e)
   }
 })
+
+const removeLetter = (e: KeyboardEvent) => {
+  for (let i = 0, len = global.letterArr.length; i < len; i++) {
+    if (String.fromCharCode(e.charCode) == global.letterArr[i].letter) {
+      global.letterArr.splice(i, 1)
+      global.score++
+      isPlay.value ? play() : ''
+      let score = document.getElementById('score') as HTMLElement
+      score.innerHTML = global.score + ''
+      if (global.score % 10 == 0 && global.appearTime > 10) {
+        global.appearTime -= 40
+      } else if (global.score % 20 == 0 && global.moveTime > 0) {
+        global.moveTime--
+      }
+      break
+    }
+  }
+}
 
 
 const start = () => {
@@ -92,7 +96,7 @@ const startGame = () => {
 
 //获取单词
 const getLetter = () => {
-  var le = {
+  let le = {
     letter: global.letters[Math.round(Math.random() * 104) % 52],
     point: {
       x: Math.round(Math.random() * 40) % 30 * ((window.innerWidth - 50) / 30),
@@ -109,7 +113,7 @@ const getLetter = () => {
 
 //单词向下移动
 const moveDown = (speed: number) => {
-  for (var i = 0, len = global.letterArr.length; i < len; i++) {
+  for (let i = 0, len = global.letterArr.length; i < len; i++) {
     global.letterArr[i].point.y += speed;
     if (global.letterArr[i].point.y >= window.innerHeight - 30) {
       global.lives--
@@ -135,7 +139,7 @@ const moveDown = (speed: number) => {
 //画出单词
 const drawText = () => {
   global.ctx.clearRect(0, 0, global.cvs.width, global.cvs.height)
-  for (var i = 0, len = global.letterArr.length; i < len; i++) {
+  for (let i = 0, len = global.letterArr.length; i < len; i++) {
     global.ctx.fillText(global.letterArr[i].letter, global.letterArr[i].point.x, global.letterArr[i].point.y)
   }
 }
@@ -143,6 +147,31 @@ const drawText = () => {
 //压缩数组
 const compressArr = (arr: any[]) => arr.filter((x: null | undefined) => x != undefined && x != null)
 
+
+// 点击单词让单词消失
+const clickLetter = (e: MouseEvent) => {
+  let range = 50;
+  for (let i = 0, len = global.letterArr.length; i < len; i++) {
+    // 允许点击的范围增大 50px
+    if (e.offsetX >= global.letterArr[i].point.x - range && e.offsetX <= global.letterArr[i].point.x + range && e.offsetY >= global.letterArr[i].point.y - range && e.offsetY <= global.letterArr[i].point.y + range) {
+      global.letterArr.splice(i, 1)
+      global.score++
+      isPlay.value ? play() : ''
+      let score = document.getElementById('score') as HTMLElement
+      score.innerHTML = global.score + ''
+      if (global.score % 10 == 0 && global.appearTime > 10) {
+        global.appearTime -= 40
+      } else if (global.score % 20 == 0 && global.moveTime > 0) {
+        global.moveTime--
+      }
+      break
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('click', clickLetter)
+})
 </script>
 
 <template>
@@ -155,6 +184,7 @@ const compressArr = (arr: any[]) => arr.filter((x: null | undefined) => x != und
       <span ml-3>生命：</span>
       <span id="lives"></span>
     </div>
+
     <canvas id="wordCanvas"></canvas>
   </div>
 </template>
